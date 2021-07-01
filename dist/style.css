@@ -1,0 +1,90 @@
+html,
+body {
+    margin: 0;
+    height: 100%;
+    background-color: rgb(248, 248, 247);
+}
+
+footer {
+    height: 5%;
+    width: 95%;
+    background-color: coral;
+    padding-left: 5%;
+    color: white;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#container {
+    display: flex;
+    height: 95%;
+    width: 100%;
+}
+
+#left {
+    height: 100%;
+    width: 25%;
+    background-color: rgb(231, 231, 228);
+    padding-left: 5%;
+}
+
+#main {
+    flex: 1 1 0;
+}
+
+#mainTop {
+    height: 10%;
+    width: 90%;
+    border-bottom: 2px solid rgba(201, 195, 195, 0.541);
+    display: flex;
+    align-items: flex-end;
+    padding-left: 10%;
+}
+
+#add {
+    display: flex;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+#addTask {
+    line-height: 8px;
+    padding-left: 10px;
+}
+
+#addTask:hover {
+    text-decoration: underline;
+}
+
+#addPlus {
+    color: coral; 
+    padding-bottom: "10px";
+    font-size: 36px !important;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.material-icons {
+    font-size: 30px !important;
+    padding-left: 10px;
+}
+
+.leftContent {
+    height: 5%;
+    width: 95%;
+    border-radius: 5px;
+    display: flex;
+    font-size: 1rem;
+    align-items: center;
+}
+
+.leftContent:hover {
+    background-color: rgb(248, 248, 247);
+    font-weight: bold;
+}
+
+.leftContentText {
+    margin-left: 10px;
+}
