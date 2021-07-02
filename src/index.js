@@ -50,7 +50,7 @@ const addTask = (() => {
         taskArray.push(getTask());
     };
     const collapseContent = function (e) {
-        if (e.target.className === 'projectChooser' || e.target.id === 'projectCreator')
+        if (e.target.className === 'projectChooser' || e.target.className.includes('projectCreatorInput'))
             document.getElementById('projectChooserCol').style.display = 'block';
         else document.getElementById('projectChooserCol').style.display = 'none';
         if (e.target.id === 'priorityChooserText')
@@ -63,10 +63,11 @@ const addTask = (() => {
     };
     const DOMTask = () => {
         if (getTask().description === '') return;
-        document.getElementById('form').before(document.createElement('li'));
-        const lastList = document.querySelectorAll('li')[document.querySelectorAll('li').length - 1];
-        const div1 = lastList.appendChild(document.createElement('div'));
-        const div2 = lastList.appendChild(document.createElement('div'));
+        const list = document.createElement('li');
+        document.getElementById('form').before(list);
+        list.className = 'taskList';
+        const div1 = list.appendChild(document.createElement('div'));
+        const div2 = list.appendChild(document.createElement('div'));
         const bullet = div1.appendChild(document.createElement('div'));
         const text = div1.appendChild(document.createElement('p'));
         const date = div2.appendChild(document.createElement('p'));

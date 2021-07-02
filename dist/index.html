@@ -35,7 +35,7 @@
                 <div id="mainTop">
                     <p id="currentPageTitle">Inbox</p>
                 </div>
-                <ul id="listContainer">
+                <ul style="list-style: none" id="listContainer">
                     <div id="form">
                         <input type="text" id="taskText" placeholder="..." />
                         <div id="formBottom">
@@ -43,18 +43,23 @@
                                 <div id="datepickerContainer">
                                     <input type="date" id="datepicker" />
                                 </div>
-                                <div class="projectChooser" id="projectChooser"> 
+                                <div class="projectChooser" id="projectChooser">
                                     <span class="material-icons formIcon projectChooser"> group_work </span>
                                     <p id="projectChooserText" class="projectChooser">Default</p>
-                                    <div id="projectChooserCol">
-                                        <input
-                                            type="text"
-                                            placeholder="Create new project"
-                                            class="projectChoice"
-                                            id="projectCreator"
-                                        />
-                                        <div class="projectChoice">Default</div>
-                                    </div>
+                                    <ul id="projectChooserCol">
+                                        <div class="projectChoice projectCreatorInput" id="projectCreator">
+                                            <input
+                                                class="projectCreatorInput"
+                                                type="text"
+                                                placeholder="Create new project"
+                                                maxlength="50"
+                                            />
+                                            <span style="border-bottom: 0" id="projectCreator" class="material-icons">
+                                                add
+                                            </span>
+                                        </div>
+                                        <li class="projectChoice projectList"><span>Default</span></li>
+                                    </ul>
                                 </div>
                             </div>
                             <div>
