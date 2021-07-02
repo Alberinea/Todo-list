@@ -68,6 +68,7 @@ footer {
     display: flex;
     font-size: 1rem;
     align-items: center;
+    cursor: pointer;
 }
 
 .leftContent:hover {
@@ -81,7 +82,7 @@ footer {
 
 #listContainer {
     padding-left: 10%;
-    height: 90%;
+    box-sizing: border-box;
 }
 
 .list {
@@ -89,7 +90,6 @@ footer {
     display: flex;
     align-items: center;
     font-size: 1.3rem;
-    border-bottom: 1px solid rgba(201, 195, 195, 0.541);
     height: 5%;
 }
 
@@ -103,6 +103,7 @@ footer {
     border: 0;
     cursor: pointer;
     color: rgb(114, 112, 112);
+    margin: 0;
 }
 
 #add:hover {
@@ -117,9 +118,10 @@ footer {
     border-radius: 5px;
     border: 1px solid;
     height: 60px;
-    width: 100%;
+    width: calc(100% - 20px);
     padding: 10px;
     display: none;
+    margin-top: 10px;
 }
 
 .formIcon {
@@ -160,6 +162,7 @@ input:focus {
     width: 90px;
     height: 30px;
     background-color: coral;
+    opacity: 0.5;
     margin-right: 10px;
     border-radius: 5px;
     color: white;
@@ -175,4 +178,53 @@ input:focus {
 
 #cancel:hover {
     text-decoration: underline;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(201, 195, 195, 0.541);
+}
+
+ul {
+    list-style: none;
+}
+
+.bullet {
+    height: 24px;
+    width: 24px;
+    margin-right: 24px;
+    content: url(../dist/assets/circle.png);
+    cursor: pointer;
+    user-select: none;
+}
+
+.bullet:hover {
+    content: url(../dist/assets/circle_check.png);
+}
+
+.listInside {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project {
+    border-radius: 15px;
+    background-color: blueviolet;
+    height: 20px;
+    padding: 5px 15px 5px 15px;
+    margin-right: 15px;
+    color: white;
+}
+
+.date {
+    margin-right: 15px;
+}
+
+.priority {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
 }
