@@ -228,3 +228,38 @@ ul {
     font-weight: bold;
     margin: 0;
 }
+
+#formBottomLeft {
+    display: flex;
+    align-items: center;
+}
+
+#datepickerContainer {
+    border: 1px solid;
+    border-radius: 15px;
+    padding: 3px 0 3px 0;
+    overflow: hidden;
+    height: 1.2em;
+}
+
+#datepickerContainer:hover {
+    background-color: rgb(240, 235, 235);
+}
+
+#datepicker {
+    width: 80px;
+    padding-left: 15px;
+    position: relative;
+    user-select: none;
+    font-size: 0.9em;
+    height: 100%;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+    position: absolute;
+    width: 100%;
+    right: 0;
+    background: none;
+    cursor: pointer;
+}
+
