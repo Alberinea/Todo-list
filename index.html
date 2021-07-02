@@ -14,7 +14,7 @@
             <div id="left">
                 <div style="margin-top: 15%" class="leftContent" id="inbox">
                     <span style="color: rgb(0, 68, 255)" class="material-icons"> inbox </span>
-                    <p class="leftContentText">Home</p>
+                    <p class="leftContentText">Inbox</p>
                 </div>
                 <div class="leftContent" id="today">
                     <span style="color: red" class="material-icons">
@@ -33,11 +33,28 @@
             </div>
             <div id="main">
                 <div id="mainTop">
-                    <div id="add">
-                        <span id="addPlus" class="material-icons"> add </span>
-                        <p id="addTask">Add task</p>
-                    </div>
+                    <p id="currentPageTitle">Inbox</p>
                 </div>
+                <ul id="listContainer">
+                    <div id="form">
+                        <input type="text" id="" placeholder="..." />
+                        <div id="formBottom">
+                            <div>
+                                <span style="padding: 0;" class="material-icons formIcon"> date_range </span>
+                                <span class="material-icons formIcon"> group_work </span>
+                            </div>
+                            <div><span class="material-icons formIcon"> priority_high </span></div>
+                        </div>
+                    </div>
+                    <div id="formSubmit">
+                        <div id="submit">Add task</div>
+                        <p id="cancel">Cancel</p>
+                    </div>
+                    <li id="add" class="list">
+                        <span id="addPlus" class="material-icons"> add </span>
+                        <p>Add task</p>
+                    </li>
+                </ul>
             </div>
         </div>
         <script src="main.js"></script>
