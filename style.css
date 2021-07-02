@@ -182,15 +182,11 @@ input:focus {
     text-decoration: underline;
 }
 
-li {
+.taskList {
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(201, 195, 195, 0.541);
-}
-
-ul {
-    list-style: none;
 }
 
 .bullet {
@@ -299,6 +295,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
     height: 150px;
     overflow: scroll;
     border-radius: 5px;
+    padding: 0;
 }
 
 .projectChoice {
@@ -315,12 +312,34 @@ input[type='date']::-webkit-calendar-picker-indicator {
     background-color: rgb(240, 235, 235);
 }
 
+.projectList {
+    height: 30px;
+    display: list-item;
+    list-style-position: inside;
+    padding-top: 10px;
+}
+
+li span {
+    position: relative;
+    left: 10px;
+}
+
+.projectList::marker {
+    content: '● ';
+}
+
 #projectCreator {
     border-bottom: 1px solid rgba(201, 195, 195, 0.541);
+    display: flex;
+    justify-content: space-around;
 }
 
 #projectCreator:hover {
     background-color: white;
+}
+
+#projectCreatorAdd {
+    padding: 0;
 }
 
 #priorityChooser {
