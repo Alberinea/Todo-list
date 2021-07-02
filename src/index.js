@@ -13,12 +13,7 @@ const addTask = (() => {
     const reset = () => {
         document.getElementById('taskText').value = '';
         document.getElementById('datepicker').value = '';
-    };
-    const hideInterface = () => {
-        document.getElementById('form').style.display = 'none';
-        document.getElementById('formSubmit').style.display = 'none';
-        document.getElementById('add').style.display = 'flex';
-        reset()
+        document.getElementById('priorityChooserText').textContent = '!';
     };
     const getTask = () => {
         const description = document.getElementById('taskText').value;
@@ -32,20 +27,39 @@ const addTask = (() => {
                 .replace(/\//g, '-') === document.getElementById('datepicker').value
                 ? 'Today'
                 : document.getElementById('datepicker').value;
-        const priority = '!';
-        const project = 'default';
+        const priority = document.getElementById('priorityChooserText').textContent;
+        const project = document.getElementById('projectChooserText').textContent;
         return todo(description, dueDate, priority, project);
-    };
-    const taskDone = function () {
-        this.parentNode.parentNode.remove();
     };
     const changeOpacity = () => {
         if (getTask().description === '' || document.getElementById('taskText').value === '')
             document.getElementById('submit').style.opacity = 0.5;
         else document.getElementById('submit').style.opacity = 1;
     };
+    const hideInterface = () => {
+        document.getElementById('form').style.display = 'none';
+        document.getElementById('formSubmit').style.display = 'none';
+        document.getElementById('add').style.display = 'flex';
+        reset();
+        changeOpacity();
+    };
+    const taskDone = function () {
+        this.parentNode.parentNode.remove();
+    };
     const pushArray = () => {
         taskArray.push(getTask());
+    };
+    const collapseContent = function (e) {
+        if (e.target.className === 'projectChooser' || e.target.id === 'projectCreator')
+            document.getElementById('projectChooserCol').style.display = 'block';
+        else document.getElementById('projectChooserCol').style.display = 'none';
+        if (e.target.id === 'priorityChooserText')
+            document.getElementById('priorityChooserCol').style.display = 'block';
+        else document.getElementById('priorityChooserCol').style.display = 'none';
+    };
+    const selectChildPriority = function () {
+        document.getElementById('priorityChooserText').textContent =
+            this.textContent === 'Priority Low' ? '!' : this.textContent === 'Priority Medium' ? '!!' : '!!!';
     };
     const DOMTask = () => {
         if (getTask().description === '') return;
@@ -69,17 +83,21 @@ const addTask = (() => {
         project.textContent = getTask().project;
         priority.textContent = getTask().priority;
         priority.style.color =
-            getTask().priority.length === 1 ? 'green' : getTask().priority.length === 2 ? 'yellow' : 'red';
+            getTask().priority.length === 1 ? 'green' : getTask().priority.length === 2 ? 'blue' : 'red';
         pushArray();
-        changeOpacity();
         reset();
+        changeOpacity();
         bullet.addEventListener('click', taskDone);
     };
     const addListener = () => {
         document.getElementById('add').addEventListener('click', showInterface);
         document.getElementById('cancel').addEventListener('click', hideInterface);
         document.getElementById('submit').addEventListener('click', DOMTask);
+        document
+            .querySelectorAll('.priorityChooserColChoice')
+            .forEach((p) => p.addEventListener('click', selectChildPriority));
         document.getElementById('taskText').addEventListener('keyup', changeOpacity);
+        document.addEventListener('click', collapseContent);
     };
     return { addListener };
 })();
