@@ -43,9 +43,30 @@
                                 <div id="datepickerContainer">
                                     <input type="date" id="datepicker" />
                                 </div>
-                                <span class="material-icons formIcon"> group_work </span>
+                                <div class="projectChooser" id="projectChooser"> 
+                                    <span class="material-icons formIcon projectChooser"> group_work </span>
+                                    <p id="projectChooserText" class="projectChooser">Default</p>
+                                    <div id="projectChooserCol">
+                                        <input
+                                            type="text"
+                                            placeholder="Create new project"
+                                            class="projectChoice"
+                                            id="projectCreator"
+                                        />
+                                        <div class="projectChoice">Default</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div><span class="material-icons formIcon"> priority_high </span></div>
+                            <div>
+                                <div id="priorityChooser">
+                                    <p id="priorityChooserText">!</p>
+                                    <div id="priorityChooserCol">
+                                        <div class="priorityChooserColChoice">Priority Low</div>
+                                        <div class="priorityChooserColChoice">Priority Medium</div>
+                                        <div class="priorityChooserColChoice">Priority High</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="formSubmit">
