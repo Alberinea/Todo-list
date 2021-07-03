@@ -54,6 +54,7 @@ header {
     font-size: 2rem;
     line-height: 8px;
     font-weight: bold;
+    height: 15px;
 }
 
 .material-icons {
@@ -377,4 +378,15 @@ li span {
 
 .priorityChooserColChoice:hover {
     background-color: rgb(240, 235, 235);
+}
+
+#noToday {
+    margin-bottom: 20px;
+    font-size: 1.75rem;
+    display: none;
+}
+
+#small {
+    opacity: 0.5;
+    font-size: 0.65em;
 }
