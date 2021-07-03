@@ -32,6 +32,7 @@ header {
     padding-top: 3vh;
     position: fixed;
     z-index: 0;
+    user-select: none;
 }
 
 #main {
@@ -105,6 +106,7 @@ header {
     cursor: pointer;
     color: rgb(114, 112, 112);
     margin: 0;
+    user-select: none;
 }
 
 #add:hover {
@@ -216,6 +218,7 @@ input:focus {
     padding: 5px 15px 5px 15px;
     margin-right: 15px;
     color: white;
+    user-select: none;
 }
 
 .date {
@@ -226,6 +229,7 @@ input:focus {
     font-size: 2rem;
     font-weight: bold;
     margin: 0;
+    user-select: none;
 }
 
 #formBottomLeft {
