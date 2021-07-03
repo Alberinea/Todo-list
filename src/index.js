@@ -1,8 +1,8 @@
 'use strict';
 
-import initToday from './modules/today';
+import { initToday, showNoToday } from './modules/today';
 import initUpcoming from './modules/upcoming';
-import { format, isYesterday, isPast } from 'date-fns';
+import { format, isYesterday, isPast, isToday } from 'date-fns';
 
 const todo = (description, dueDate, priority, project) => {
     return { description, dueDate, priority, project };
@@ -43,13 +43,13 @@ const addTask = (() => {
         document.getElementById('projectChooserText').textContent = 'Default';
     };
     const manageDate = () => {
-        const oldDate = new Date(document.getElementById('datepicker').value || 1111-11-11);
-        let oldDateFormatted = format(oldDate, 'yyyy-M-d') || '';
+        const oldDate = new Date(document.getElementById('datepicker').value || 1111 - 11 - 11);
+        let oldDateFormatted = format(oldDate, 'yyyy-MM-dd');
         let date = format(oldDate, 'd/M/yyyy');
         if (isYesterday(oldDate)) date = 'Yesterday';
         if (date === format(new Date(), 'd/M/yyyy')) date = 'Today';
-        if (date === '1/1/1970') date = ''
-        if (oldDateFormatted === '1970-1-1') oldDateFormatted = ''
+        if (date === '1/1/1970') date = '';
+        if (oldDateFormatted === '1970-01-01') oldDateFormatted = '';
         return { date, oldDateFormatted, oldDate };
     };
     const createTask = () => {
@@ -70,8 +70,17 @@ const addTask = (() => {
         reset();
         changeOpacity();
     };
-    const taskDone = function () {
+    const removeTask = function () {
+        const checkTitleToday = () => {
+            if (document.getElementById('currentPageTitle').innerText === `Today ${new Date().toDateString()}`) {
+                if (!taskArray.some((task) => isToday(new Date(task.dueDate)))) showNoToday();
+            }
+        };
         this.parentNode.parentNode.remove();
+        for (let i = 0; i < taskArray.length; i++) {
+            if (taskArray[i].description === this.nextSibling.textContent) taskArray.splice(i, 1);
+        }
+        checkTitleToday();
     };
     const pushArray = () => {
         taskArray.push(createTask());
@@ -147,8 +156,7 @@ const addTask = (() => {
         pushArray();
         reset();
         changeOpacity();
-        bullet.addEventListener('click', taskDone);
-        console.log(taskArray);
+        bullet.addEventListener('click', removeTask);
     };
     const addListener = () => {
         document.getElementById('add').addEventListener('click', showInterface);
