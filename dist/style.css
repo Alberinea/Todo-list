@@ -5,7 +5,7 @@ body {
     background-color: rgb(248, 248, 247);
 }
 
-footer {
+header {
     height: 5%;
     width: 95%;
     background-color: coral;
@@ -15,7 +15,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: fixed;
+    position: fixed;    
     z-index: 100;
 }
 
@@ -305,7 +305,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     align-items: center;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .projectChoice:hover {

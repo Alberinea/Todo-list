@@ -5,6 +5,7 @@ const todo = (description, dueDate, priority, project) => {
 
 const addTask = (() => {
     const taskArray = [];
+    const projectArray = [];
     const showInterface = () => {
         document.getElementById('form').style.display = 'block';
         document.getElementById('formSubmit').style.display = 'flex';
@@ -14,6 +15,7 @@ const addTask = (() => {
         document.getElementById('taskText').value = '';
         document.getElementById('datepicker').value = '';
         document.getElementById('priorityChooserText').textContent = '!';
+        document.getElementById('projectChooserText').textContent = 'Default'
     };
     const getTask = () => {
         const description = document.getElementById('taskText').value;
@@ -61,6 +63,31 @@ const addTask = (() => {
         document.getElementById('priorityChooserText').textContent =
             this.textContent === 'Priority Low' ? '!' : this.textContent === 'Priority Medium' ? '!!' : '!!!';
     };
+    const selectProject = function () {
+        document.getElementById('projectChooserText').textContent = this.textContent;
+    };
+    const initProject = () => {
+        for (const iterator of projectArray) {
+            const element = document.createElement('li');
+            document.getElementById('projectChooserCol').appendChild(element);
+            element.className = 'projectChoice projectList';
+            const span = element.appendChild(document.createElement('span'));
+            span.textContent = iterator;
+        }
+    };
+    const pushProject = () => {
+        projectArray.push(document.getElementById('projectCreatorInput').value);
+        document.getElementById('projectCreatorInput').value = '';
+        const createProject = () => {
+            const element = document.createElement('li');
+            document.getElementById('projectChooserCol').appendChild(element);
+            element.className = 'projectChoice projectList';
+            const span = element.appendChild(document.createElement('span'));
+            span.textContent = projectArray[projectArray.length - 1];
+            element.addEventListener('click', selectProject)
+        };
+        createProject()
+    };
     const DOMTask = () => {
         if (getTask().description === '') return;
         const list = document.createElement('li');
@@ -94,6 +121,8 @@ const addTask = (() => {
         document.getElementById('add').addEventListener('click', showInterface);
         document.getElementById('cancel').addEventListener('click', hideInterface);
         document.getElementById('submit').addEventListener('click', DOMTask);
+        document.getElementById('projectCreatorPlus').addEventListener('click', pushProject);
+        document.querySelectorAll('.projectList').forEach((p) => p.addEventListener('click', selectProject));
         document
             .querySelectorAll('.priorityChooserColChoice')
             .forEach((p) => p.addEventListener('click', selectChildPriority));

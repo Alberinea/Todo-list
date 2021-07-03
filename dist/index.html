@@ -7,9 +7,9 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     </head>
     <body>
-        <footer id="footer">
+        <header id="header">
             <p id="title">Todo list</p>
-        </footer>
+        </header>
         <div id="container">
             <div id="left">
                 <div style="margin-top: 15%" class="leftContent" id="inbox">
@@ -49,12 +49,13 @@
                                     <ul id="projectChooserCol">
                                         <div class="projectChoice projectCreatorInput" id="projectCreator">
                                             <input
+                                                id="projectCreatorInput"
                                                 class="projectCreatorInput"
                                                 type="text"
-                                                placeholder="Create new project"
+                                                placeholder="Create a new project"
                                                 maxlength="50"
                                             />
-                                            <span style="border-bottom: 0" id="projectCreator" class="material-icons">
+                                            <span style="border-bottom: 0" id="projectCreatorPlus" class="material-icons">
                                                 add
                                             </span>
                                         </div>
