@@ -85,6 +85,8 @@ header {
 #listContainer {
     padding-left: 10%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 .list {
@@ -107,6 +109,7 @@ header {
     color: rgb(114, 112, 112);
     margin: 0;
     user-select: none;
+    order: 999999;
 }
 
 #add:hover {
@@ -125,6 +128,7 @@ header {
     padding: 10px;
     display: none;
     margin-top: 10px;
+    order: 999997;
 }
 
 .formIcon {
@@ -160,6 +164,7 @@ input:focus {
     margin-top: 10px;
     display: none;
     user-select: none;
+    order: 999998;
 }
 
 #submit {
@@ -395,4 +400,10 @@ li span {
 #small {
     opacity: 0.5;
     font-size: 0.65em;
+}
+
+.upcoming {
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding-top: 20px;
 }
