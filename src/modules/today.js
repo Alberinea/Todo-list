@@ -1,7 +1,7 @@
 'use strict';
 
 import { switchPage } from '..';
-import { getTask } from '..';
+import { taskArray } from '..';
 import { isToday } from 'date-fns';
 
 function checkDate(date, isOnce) {
@@ -24,11 +24,11 @@ function showNoToday() {
 
 function filterToday() {
     checkDate('Today', true);
-    if (getTask().length === 0) {
+    if (taskArray.length === 0) {
         showNoToday();
         return;
     }
-    if (!getTask().some((task) => isToday(new Date(task.dueDate)))) showNoToday();
+    if (!taskArray.some((task) => isToday(new Date(task.dueDate)))) showNoToday();
 }
 
 function initToday() {

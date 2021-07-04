@@ -9,6 +9,7 @@ const todo = (description, dueDate, priority, project) => {
 };
 
 function switchPage(title, isInbox) {
+    document.querySelectorAll('.taskList').forEach((task) => (task.style.display = 'flex'));
     document.getElementById('currentPageTitle').textContent = title;
     document.getElementById('noToday').style.display = 'none';
     if (isInbox) {
@@ -28,9 +29,10 @@ function initInbox() {
     showAllTasks();
 }
 
+const taskArray = [];
+const projectArray = [];
+
 const addTask = (() => {
-    const taskArray = [];
-    const projectArray = [];
     const showInterface = () => {
         document.getElementById('form').style.display = 'block';
         document.getElementById('formSubmit').style.display = 'flex';
@@ -43,13 +45,17 @@ const addTask = (() => {
         document.getElementById('projectChooserText').textContent = 'Default';
     };
     const manageDate = () => {
-        const oldDate = new Date(document.getElementById('datepicker').value || 1111 - 11 - 11);
-        let oldDateFormatted = format(oldDate, 'yyyy-MM-dd');
+        const current = new Date();
+        const HMS = ` ${current.getHours()}:${current.getMinutes()}:${current.getSeconds()}`;
+        const datepickerValue = document.getElementById('datepicker').value;
+        const fullDate = datepickerValue != '' ? datepickerValue + HMS : datepickerValue
+        const oldDate = new Date(fullDate || 1111 - 11 - 11);
+        let oldDateFormatted = format(oldDate, 'yyyy-MM-dd kk:mm:ss');
         let date = format(oldDate, 'd/M/yyyy');
         if (isYesterday(oldDate)) date = 'Yesterday';
-        if (date === format(new Date(), 'd/M/yyyy')) date = 'Today';
+        if (isToday(oldDate)) date = 'Today';
         if (date === '1/1/1970') date = '';
-        if (oldDateFormatted === '1970-01-01') oldDateFormatted = '';
+        if (oldDateFormatted === '1970-01-01 09:00:01') oldDateFormatted = '';
         return { date, oldDateFormatted, oldDate };
     };
     const createTask = () => {
@@ -76,11 +82,20 @@ const addTask = (() => {
                 if (!taskArray.some((task) => isToday(new Date(task.dueDate)))) showNoToday();
             }
         };
+        const checkTitleUpcoming = () => {
+            if (document.getElementById('currentPageTitle').innerText === `Upcoming`) {
+                if (taskArray.length === 0) {
+                    showNoToday();
+                    document.getElementById('noToday').innerText = 'No upcoming tasks';
+                }
+            }
+        };
         this.parentNode.parentNode.remove();
         for (let i = 0; i < taskArray.length; i++) {
             if (taskArray[i].description === this.nextSibling.textContent) taskArray.splice(i, 1);
         }
         checkTitleToday();
+        checkTitleUpcoming();
     };
     const pushArray = () => {
         taskArray.push(createTask());
@@ -142,6 +157,7 @@ const addTask = (() => {
         project.className = 'project';
         date.className = 'date';
         priority.className = 'priority';
+        text.className = 'description';
         text.textContent = createTask().description;
         date.textContent = manageDate().date;
         project.textContent = createTask().project;
@@ -176,14 +192,6 @@ const addTask = (() => {
     return { addListener, taskArray, projectArray };
 })();
 
-function getTask() {
-    return addTask.taskArray;
-}
-
-function getProject() {
-    return addTask.projectArray;
-}
-
 addTask.addListener();
 
-export { getTask, getProject, switchPage };
+export { taskArray, projectArray, switchPage };
