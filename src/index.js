@@ -12,12 +12,13 @@ function switchPage(title, isInbox) {
     document.querySelectorAll('.taskList').forEach((task) => (task.style.display = 'flex'));
     document.getElementById('currentPageTitle').textContent = title;
     document.getElementById('noToday').style.display = 'none';
+    document.querySelectorAll('.upcoming').forEach((ele) => ele.remove());
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('formSubmit').style.display = 'none';
     if (isInbox) {
         document.getElementById('add').style.display = 'flex';
     } else {
         document.getElementById('add').style.display = 'none';
-        document.getElementById('form').style.display = 'none';
-        document.getElementById('formSubmit').style.display = 'none';
     }
 }
 
@@ -48,9 +49,9 @@ const addTask = (() => {
         const current = new Date();
         const HMS = ` ${current.getHours()}:${current.getMinutes()}:${current.getSeconds()}`;
         const datepickerValue = document.getElementById('datepicker').value;
-        const fullDate = datepickerValue != '' ? datepickerValue + HMS : datepickerValue
+        const fullDate = datepickerValue != '' ? datepickerValue + HMS : datepickerValue;
         const oldDate = new Date(fullDate || 1111 - 11 - 11);
-        let oldDateFormatted = format(oldDate, 'yyyy-MM-dd kk:mm:ss');
+        let oldDateFormatted = format(oldDate, 'yyyy-MM-dd HH:mm:ss');
         let date = format(oldDate, 'd/M/yyyy');
         if (isYesterday(oldDate)) date = 'Yesterday';
         if (isToday(oldDate)) date = 'Today';
@@ -193,5 +194,7 @@ const addTask = (() => {
 })();
 
 addTask.addListener();
+
+// window.onload = () => document.getElementById('datepicker').min = format(new Date(), 'yyyy-MM-dd')
 
 export { taskArray, projectArray, switchPage };
