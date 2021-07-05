@@ -302,6 +302,9 @@ function initStorage() {
 
 initStorage();
 
+localStorage.clear()
+console.log(localStorage)
+
 addTask.addListeners();
 window.onload = () => (document.getElementById('datepicker').min = format(new Date(), 'yyyy-MM-dd'));
 
