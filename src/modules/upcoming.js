@@ -2,7 +2,6 @@
 
 import { checkDate, showNoToday } from './today';
 import { switchPage } from '..';
-import { taskArray } from '..';
 import { isPast, isToday, compareAsc } from 'date-fns';
 
 function getTaskListFiltered() {
@@ -12,11 +11,12 @@ function getTaskListFiltered() {
 }
 
 function notShowToday() {
-    const today = taskArray.filter((task) => isToday(new Date(task.dueDate)) || task.dueDate === '');
-    for (let i = 0; i < taskArray.length; i++) {
+    const local = JSON.parse(localStorage.getItem('task'))
+    const today = local.filter((task) => isToday(new Date(task.dueDate)) || task.dueDate === '');
+    for (let i = 0; i < local.length; i++) {
         const des = document.querySelectorAll('.description');
         if (today.find((o) => o.description === des[i].innerText) != undefined)
-        des[i].parentNode.parentNode.style.display = 'none';
+            des[i].parentNode.parentNode.style.display = 'none';
     }
     if (getTaskListFiltered().length === 0) {
         showNoToday('No upcoming tasks');

@@ -5,11 +5,12 @@ import initUpcoming from './modules/upcoming';
 import { format, isYesterday, isPast, isToday } from 'date-fns';
 import { initProject } from './modules/projects';
 
-const todo = (description, dueDate, priority, project) => {
-    return { description, dueDate, priority, project };
+const todo = (description, dueDate, DOMDate, priority, project) => {
+    return { description, dueDate, DOMDate, priority, project };
 };
 
 function switchPage(title, isInbox) {
+    document.getElementById('projectChooserText').textContent = 'Default';
     document.querySelectorAll('.taskList').forEach((task) => (task.style.display = 'flex'));
     document.getElementById('currentPageTitle').textContent = title;
     document.getElementById('noToday').style.display = 'none';
@@ -31,8 +32,8 @@ function initInbox() {
     showAllTasks();
 }
 
-const taskArray = [];
-const projectArray = [];
+let taskArray = [];
+let projectArray = [];
 
 const addTask = (() => {
     const showInterface = () => {
@@ -63,9 +64,10 @@ const addTask = (() => {
     const createTask = () => {
         const description = document.getElementById('taskText').value;
         const dueDate = manageDate().oldDateFormatted;
+        const DOMDate = manageDate().date;
         const priority = document.getElementById('priorityChooserText').textContent;
         const project = document.getElementById('projectChooserText').textContent;
-        return todo(description, dueDate, priority, project);
+        return todo(description, dueDate, DOMDate, priority, project);
     };
     const changeOpacity = () => {
         if (document.getElementById('taskText').value === '') document.getElementById('submit').style.opacity = 0.5;
@@ -79,14 +81,15 @@ const addTask = (() => {
         changeOpacity();
     };
     const removeTask = function () {
+        const local = JSON.parse(localStorage.getItem('task'));
         const checkTitleToday = () => {
             if (document.getElementById('currentPageTitle').innerText === `Today ${new Date().toDateString()}`) {
-                if (!taskArray.some((task) => isToday(new Date(task.dueDate)))) showNoToday();
+                if (!local.some((task) => isToday(new Date(task.dueDate)))) showNoToday();
             }
         };
         const checkTitleUpcoming = () => {
             if (document.getElementById('currentPageTitle').innerText === `Upcoming`) {
-                if (taskArray.length === 0) {
+                if (local.length === 0) {
                     showNoToday();
                     document.getElementById('noToday').innerText = 'No upcoming tasks';
                 }
@@ -94,13 +97,19 @@ const addTask = (() => {
         };
         this.parentNode.parentNode.remove();
         for (let i = 0; i < taskArray.length; i++) {
-            if (taskArray[i].description === this.nextSibling.textContent) taskArray.splice(i, 1);
+            if (taskArray[i].description === this.nextSibling.textContent) {
+                taskArray.splice(i, 1);
+            }
         }
+        localStorage.setItem('task', JSON.stringify(taskArray));
         checkTitleToday();
         checkTitleUpcoming();
     };
-    const pushArray = () => {
-        taskArray.push(createTask());
+    const pushStorage = (array, item, push) => {
+        array = JSON.parse(localStorage.getItem(item));
+        if (array == null) array = [];
+        array.push(push);
+        localStorage.setItem(item, JSON.stringify(array));
     };
     const collapseContent = function (e) {
         if (e.target.className === 'projectChooser' || e.target.className.includes('projectCreatorInput'))
@@ -124,6 +133,42 @@ const addTask = (() => {
     const selectProject = function () {
         document.getElementById('projectChooserText').textContent = this.textContent;
     };
+    const removeProject = function () {
+        this.parentNode.remove();
+        this.parentNode.removeEventListener('click', initProject);
+        const removeProjectArray = () => {
+            for (let i = 0; i < projectArray.length; i++) {
+                const thisText = this.parentNode.firstElementChild.textContent;
+                const lists = document.querySelectorAll('.projectList');
+                if (projectArray[i] === thisText) projectArray.splice(i, 1);
+                if (lists[i + 1].textContent === thisText) lists[i + 1].remove();
+            }
+            localStorage.setItem('project', JSON.stringify(projectArray));
+        };
+        removeProjectArray();
+        initInbox();
+    };
+    const createProject = (context) => {
+        const element = document.createElement('li');
+        document.getElementById('projectChooserCol').appendChild(element);
+        element.className = 'projectChoice projectList';
+        const span = element.appendChild(document.createElement('span'));
+        span.textContent = context;
+        element.addEventListener('click', selectProject);
+        document.getElementById('projectChooserText').textContent = context;
+    };
+    const createProjectTab = (context) => {
+        const collapse = document.getElementById('projectsCollapse');
+        const under = collapse.appendChild(document.createElement('p'));
+        under.className = 'projectsUnder';
+        under.appendChild(document.createElement('span')).textContent = context;
+        const cross = document.createElement('span');
+        under.appendChild(cross);
+        cross.className = 'material-icons cross';
+        cross.textContent = 'clear';
+        under.addEventListener('click', initProject);
+        cross.addEventListener('click', removeProject);
+    };
     const manageProject = () => {
         let text = document.getElementById('projectCreatorInput').value;
         if (text === '') {
@@ -138,52 +183,27 @@ const addTask = (() => {
                 return;
             }
         }
-        projectArray.push(text);
-
         document.getElementById('projectCreator').reset();
 
-        const createProject = () => {
-            const element = document.createElement('li');
-            document.getElementById('projectChooserCol').appendChild(element);
-            element.className = 'projectChoice projectList';
-            const span = element.appendChild(document.createElement('span'));
-            span.textContent = projectArray[projectArray.length - 1];
-            element.addEventListener('click', selectProject);
-            document.getElementById('projectChooserText').textContent = projectArray[projectArray.length - 1];
-        };
-
-        const removeProject = function () {
-            this.parentNode.remove();
-            this.parentNode.removeEventListener('click', initProject);
-            const removeProjectArray = () => {
-                for (let i = 0; i < projectArray.length; i++) {
-                    const thisText = this.parentNode.firstElementChild.textContent;
-                    const lists = document.querySelectorAll('.projectList');
-                    if (projectArray[i] === thisText) projectArray.splice(i, 1);
-                    if (lists[i + 1].textContent === thisText) lists[i + 1].remove();
-                }
-            };
-            removeProjectArray();
-            initInbox();
-        };
-
-        const createProjectTab = () => {
-            const collapse = document.getElementById('projectsCollapse');
-            const under = collapse.appendChild(document.createElement('p'));
-            under.className = 'projectsUnder';
-            under.appendChild(document.createElement('span')).textContent = projectArray[projectArray.length - 1];
-            const cross = document.createElement('span');
-            under.appendChild(cross);
-            cross.className = 'material-icons cross';
-            cross.textContent = 'clear';
-            under.addEventListener('click', initProject);
-            cross.addEventListener('click', removeProject);
-        };
-        createProject();
-        createProjectTab();
+        pushStorage(projectArray, 'project', text);
+        const lastProject = text
+        createProject(lastProject);
+        createProjectTab(lastProject);
     };
-    const DOMTask = () => {
-        if (createTask().description === '') return;
+
+    const changeColor = () => {
+        const priority = document.querySelectorAll('.priority');
+        const dates = document.querySelectorAll('.date');
+        const local = JSON.parse(localStorage.getItem('task'));
+        for (let i = 0; i < local.length; i++) {
+            priority[i].style.color =
+                local[i].priority.length === 1 ? 'green' : local[i].priority.length === 2 ? 'blue' : 'red';
+            dates[i].style.color =
+                local[i].DOMDate === 'Today' ? 'blue' : isPast(new Date(local[i].dueDate)) ? 'red' : 'black';
+        }
+    };
+
+    const createTaskDOM = (des, DOMDate, proj, pri, detailed) => {
         const list = document.createElement('li');
         document.getElementById('form').before(list);
         list.className = 'taskList';
@@ -203,23 +223,41 @@ const addTask = (() => {
         date.className = 'date';
         priority.className = 'priority';
         text.className = 'description';
-        text.textContent = createTask().description;
-        date.textContent = manageDate().date;
-        project.textContent = createTask().project;
-        priority.textContent = createTask().priority;
+        text.textContent = des;
+        date.textContent = DOMDate;
+        project.textContent = proj;
+        priority.textContent = pri;
 
-        const changeColor = () => {
-            priority.style.color =
-                createTask().priority.length === 1 ? 'green' : createTask().priority.length === 2 ? 'blue' : 'red';
-            date.style.color = manageDate().date === 'Today' ? 'blue' : isPast(manageDate().oldDate) ? 'red' : 'black';
+        const checkTodayYesterday = () => {
+            //needed a new date format
+            if (DOMDate === 'Today') {
+                if (!isToday(new Date(detailed)) && isYesterday(new Date(detailed))) {
+                    DOMDate = 'Yesterday';
+                    return;
+                }
+                if (!isToday(new Date(detailed)) && !isYesterday(new Date(detailed))) {
+                    DOMDate = detailed;
+                    return;
+                }
+            }
+            if (DOMDate === 'Yesterday') {
+                if (!isYesterday(new Date(detailed))) DOMDate = detailed;
+            }
         };
-        changeColor();
-        pushArray();
-        reset();
-        changeOpacity();
+
+        checkTodayYesterday();
         bullet.addEventListener('click', removeTask);
     };
-    const addListener = () => {
+
+    const DOMTask = () => {
+        if (createTask().description === '') return;
+        createTaskDOM(createTask().description, createTask().DOMDate, createTask().project, createTask().priority);
+        pushStorage(taskArray, 'task', createTask());
+        changeColor();
+        reset();
+        changeOpacity();
+    };
+    const addListeners = () => {
         document.getElementById('add').addEventListener('click', showInterface);
         document.getElementById('cancel').addEventListener('click', hideInterface);
         document.getElementById('projects').addEventListener('click', expandProjects);
@@ -236,11 +274,35 @@ const addTask = (() => {
         document.getElementById('taskText').addEventListener('keyup', changeOpacity);
         document.addEventListener('click', collapseContent);
     };
-    return { addListener, taskArray, projectArray };
+    return { addListeners, createTaskDOM, changeColor, createProject, createProjectTab };
 })();
 
-addTask.addListener();
+function initStorage() {
+    if (localStorage.length === 0 || localStorage.key(0) == null) return;
+    const taskParsed = JSON.parse(localStorage.getItem('task'));
+    taskArray = taskParsed;
+    for (let i = 0; i < taskParsed.length; i++) {
+        addTask.createTaskDOM(
+            taskParsed[i].description,
+            taskParsed[i].DOMDate,
+            taskParsed[i].project,
+            taskParsed[i].priority,
+            taskParsed[i].dueDate
+        );
+    }
+    if (localStorage.key(1) == null) return;
+    const projectParsed = JSON.parse(localStorage.getItem('project'));
+    projectArray = projectParsed;
+    for (let i = 0; i < projectParsed.length; i++) {
+        addTask.createProject(projectParsed[i]);
+        addTask.createProjectTab(projectParsed[i]);
+    }
+    addTask.changeColor();
+}
 
+initStorage();
+
+addTask.addListeners();
 window.onload = () => (document.getElementById('datepicker').min = format(new Date(), 'yyyy-MM-dd'));
 
-export { taskArray, projectArray, switchPage };
+export { switchPage };
