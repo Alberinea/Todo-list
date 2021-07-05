@@ -27,8 +27,14 @@
                     <p class="leftContentText">Upcoming</p>
                 </div>
                 <div class="leftContent" id="projects">
-                    <span style="color: black" class="material-icons"> workspaces </span>
-                    <p class="leftContentText">Projects</p>
+                    <div id="projectsLeft">
+                        <span style="color: black" class="material-icons"> workspaces </span>
+                        <p class="leftContentText">Projects</p>
+                    </div>
+                    <div id="projectsCollapse">
+                        <p class="projectsUnder"><span>Default</span></p>
+                    </div>
+                    <span id="chevron" style="padding-right: 20px" class="material-icons">chevron_right</span>
                 </div>
             </div>
             <div id="main">
@@ -42,13 +48,13 @@
                         <div id="formBottom">
                             <div id="formBottomLeft">
                                 <div id="datepickerContainer">
-                                    <input type="date" id="datepicker"/>
+                                    <input type="date" id="datepicker" />
                                 </div>
                                 <div class="projectChooser" id="projectChooser">
                                     <span class="material-icons formIcon projectChooser"> group_work </span>
                                     <p id="projectChooserText" class="projectChooser">Default</p>
                                     <ul id="projectChooserCol">
-                                        <div class="projectChoice projectCreatorInput" id="projectCreator">
+                                        <form class="projectChoice projectCreatorInput" id="projectCreator">
                                             <input
                                                 id="projectCreatorInput"
                                                 class="projectCreatorInput"
@@ -56,10 +62,14 @@
                                                 placeholder="Create a new project"
                                                 maxlength="50"
                                             />
-                                            <span style="border-bottom: 0" id="projectCreatorPlus" class="material-icons">
+                                            <span
+                                                style="border-bottom: 0"
+                                                id="projectCreatorPlus"
+                                                class="material-icons"
+                                            >
                                                 add
                                             </span>
-                                        </div>
+                                        </form>
                                         <li class="projectChoice projectList"><span>Default</span></li>
                                     </ul>
                                 </div>
