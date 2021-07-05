@@ -4,6 +4,6 @@ Project: Todo list
 
 Some minor bugs still exist.
 
-Have learnt a lot from this project.
+Have learned a lot from this project.
 
 [Live Demo](https://alberinea.github.io/Todo-list/)
