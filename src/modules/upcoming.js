@@ -11,7 +11,11 @@ function getTaskListFiltered() {
 }
 
 function notShowToday() {
-    const local = JSON.parse(localStorage.getItem('task'))
+    const local = JSON.parse(localStorage.getItem('task'));
+    if (local == null) {
+        showNoToday('No upcoming tasks');
+        return;
+    }
     const today = local.filter((task) => isToday(new Date(task.dueDate)) || task.dueDate === '');
     for (let i = 0; i < local.length; i++) {
         const des = document.querySelectorAll('.description');
@@ -20,7 +24,6 @@ function notShowToday() {
     }
     if (getTaskListFiltered().length === 0) {
         showNoToday('No upcoming tasks');
-        document.getElementById('noToday').innerText = 'No upcoming tasks';
     }
 }
 
@@ -43,14 +46,14 @@ function sortDOMDate() {
             p.innerText = isPast(parsed)
                 ? 'Overdue'
                 : getTaskListFiltered()[i].getElementsByClassName('date')[0].innerText;
-            p.innerText = p.innerText === 'Yesterday' ? 'Overdue' : p.innerText //Yesterday bug fix for now
+            p.innerText = p.innerText === 'Yesterday' ? 'Overdue' : p.innerText; //Yesterday bug fix for now
             p.style.order = getTaskListFiltered()[i].style.order - 1;
-            const ps = document.querySelectorAll('.upcoming')
-            let count = 0
+            const ps = document.querySelectorAll('.upcoming');
+            let count = 0;
             for (let i = 0; i < ps.length; i++) {
-                count = p.innerText === ps[i].innerText ? count+= 1 : count;
+                count = p.innerText === ps[i].innerText ? (count += 1) : count;
             }
-            if (count > 1) p.remove()
+            if (count > 1) p.remove();
         };
         displayDates();
     }

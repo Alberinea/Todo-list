@@ -22,8 +22,12 @@ function showNoToday(text) {
 }
 
 function filterToday() {
-    const local = JSON.parse(localStorage.getItem('task'));
     checkDate('Today', true);
+    const local = JSON.parse(localStorage.getItem('task'));
+    if (local == null) {
+        showNoToday('No task is due today');
+        return;
+    } 
     if (local.length === 0) {
         showNoToday('No task is due today');
         return;

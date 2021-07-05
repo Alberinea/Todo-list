@@ -6,6 +6,10 @@ import { showNoToday } from './today';
 function filterProject() {
     const title = document.getElementById('currentPageTitle').innerText;
     const local = JSON.parse(localStorage.getItem('task'))
+    if (local == null) {
+        showNoToday('No current project');
+        return
+    }
     if (!local.some((task) => title.includes(task.project))) showNoToday('No current project');
     document
         .querySelectorAll('.project')

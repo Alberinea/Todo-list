@@ -278,7 +278,7 @@ const addTask = (() => {
 })();
 
 function initStorage() {
-    if (localStorage.length === 0 || localStorage.key(0) == null) return;
+    if (localStorage.key(0) == null) return
     const taskParsed = JSON.parse(localStorage.getItem('task'));
     taskArray = taskParsed;
     for (let i = 0; i < taskParsed.length; i++) {
