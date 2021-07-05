@@ -5,24 +5,23 @@ import { switchPage } from '..';
 import { taskArray } from '..';
 import { isPast, isToday, compareAsc } from 'date-fns';
 
-function notShowToday() {
-    if (taskArray.length === 0) {
-        showNoToday();
-        document.getElementById('noToday').innerText = 'No upcoming tasks';
-        return;
-    }
-    const today = taskArray.filter((task) => isToday(new Date(task.dueDate)) || task.dueDate === '');
-    for (let i = 0; i < taskArray.length; i++) {
-        const des = document.querySelectorAll('.description');
-        if (today.find((o) => o.description === des[i].innerText) != undefined)
-            des[i].parentNode.parentNode.style.display = 'none';
-    }
-}
-
 function getTaskListFiltered() {
     const taskList = document.querySelectorAll('.taskList');
     const taskListFiltered = Array.from(taskList).filter((task) => task.style.display === 'flex');
     return taskListFiltered;
+}
+
+function notShowToday() {
+    const today = taskArray.filter((task) => isToday(new Date(task.dueDate)) || task.dueDate === '');
+    for (let i = 0; i < taskArray.length; i++) {
+        const des = document.querySelectorAll('.description');
+        if (today.find((o) => o.description === des[i].innerText) != undefined)
+        des[i].parentNode.parentNode.style.display = 'none';
+    }
+    if (getTaskListFiltered().length === 0) {
+        showNoToday('No upcoming tasks');
+        document.getElementById('noToday').innerText = 'No upcoming tasks';
+    }
 }
 
 function sortDOMDate() {
@@ -44,6 +43,7 @@ function sortDOMDate() {
             p.innerText = isPast(parsed)
                 ? 'Overdue'
                 : getTaskListFiltered()[i].getElementsByClassName('date')[0].innerText;
+            p.innerText = p.innerText === 'Yesterday' ? 'Overdue' : p.innerText //Yesterday bug fix for now
             p.style.order = getTaskListFiltered()[i].style.order - 1;
             const ps = document.querySelectorAll('.upcoming')
             let count = 0

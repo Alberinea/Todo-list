@@ -16,19 +16,19 @@ function checkDate(date, isOnce) {
         });
 }
 
-function showNoToday() {
+function showNoToday(text) {
     const noToday = document.getElementById('noToday');
     noToday.style.display = 'block';
-    noToday.textContent = 'No task is due today';
+    noToday.textContent = text
 }
 
 function filterToday() {
     checkDate('Today', true);
     if (taskArray.length === 0) {
-        showNoToday();
+        showNoToday('No task is due today');
         return;
     }
-    if (!taskArray.some((task) => isToday(new Date(task.dueDate)))) showNoToday();
+    if (!taskArray.some((task) => isToday(new Date(task.dueDate)))) showNoToday('No task is due today');
 }
 
 function initToday() {

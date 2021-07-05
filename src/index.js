@@ -3,6 +3,7 @@
 import { initToday, showNoToday } from './modules/today';
 import initUpcoming from './modules/upcoming';
 import { format, isYesterday, isPast, isToday } from 'date-fns';
+import { initProject } from './modules/projects';
 
 const todo = (description, dueDate, priority, project) => {
     return { description, dueDate, priority, project };
@@ -109,6 +110,13 @@ const addTask = (() => {
             document.getElementById('priorityChooserCol').style.display = 'block';
         else document.getElementById('priorityChooserCol').style.display = 'none';
     };
+    const expandProjects = () => {
+        document.getElementById('chevron').textContent =
+            document.getElementById('chevron').textContent === 'chevron_right' ? 'expand_more' : 'chevron_right';
+        document.getElementById('projectsCollapse').style.transform =
+            document.getElementById('projectsCollapse').style.transform === 'scaleY(1)' ? 'scaleY(0)' : 'scaleY(1)';
+    };
+
     const selectChildPriority = function () {
         document.getElementById('priorityChooserText').textContent =
             this.textContent === 'Priority Low' ? '!' : this.textContent === 'Priority Medium' ? '!!' : '!!!';
@@ -116,18 +124,24 @@ const addTask = (() => {
     const selectProject = function () {
         document.getElementById('projectChooserText').textContent = this.textContent;
     };
-    const initProject = () => {
-        for (const iterator of projectArray) {
-            const element = document.createElement('li');
-            document.getElementById('projectChooserCol').appendChild(element);
-            element.className = 'projectChoice projectList';
-            const span = element.appendChild(document.createElement('span'));
-            span.textContent = iterator;
+    const manageProject = () => {
+        let text = document.getElementById('projectCreatorInput').value;
+        if (text === '') {
+            alert('Please input more than one word');
+            return;
         }
-    };
-    const pushProject = () => {
-        projectArray.push(document.getElementById('projectCreatorInput').value);
-        document.getElementById('projectCreatorInput').value = '';
+        const lists = document.querySelectorAll('.projectList');
+        for (let i = 0; i < lists.length; i++) {
+            if (text === lists[i].textContent) {
+                alert('This project already exists');
+                document.getElementById('projectCreator').reset();
+                return;
+            }
+        }
+        projectArray.push(text);
+
+        document.getElementById('projectCreator').reset();
+
         const createProject = () => {
             const element = document.createElement('li');
             document.getElementById('projectChooserCol').appendChild(element);
@@ -135,8 +149,38 @@ const addTask = (() => {
             const span = element.appendChild(document.createElement('span'));
             span.textContent = projectArray[projectArray.length - 1];
             element.addEventListener('click', selectProject);
+            document.getElementById('projectChooserText').textContent = projectArray[projectArray.length - 1];
+        };
+
+        const removeProject = function () {
+            this.parentNode.remove();
+            this.parentNode.removeEventListener('click', initProject);
+            const removeProjectArray = () => {
+                for (let i = 0; i < projectArray.length; i++) {
+                    const thisText = this.parentNode.firstElementChild.textContent;
+                    const lists = document.querySelectorAll('.projectList');
+                    if (projectArray[i] === thisText) projectArray.splice(i, 1);
+                    if (lists[i + 1].textContent === thisText) lists[i + 1].remove();
+                }
+            };
+            removeProjectArray();
+            initInbox();
+        };
+
+        const createProjectTab = () => {
+            const collapse = document.getElementById('projectsCollapse');
+            const under = collapse.appendChild(document.createElement('p'));
+            under.className = 'projectsUnder';
+            under.appendChild(document.createElement('span')).textContent = projectArray[projectArray.length - 1];
+            const cross = document.createElement('span');
+            under.appendChild(cross);
+            cross.className = 'material-icons cross';
+            cross.textContent = 'clear';
+            under.addEventListener('click', initProject);
+            cross.addEventListener('click', removeProject);
         };
         createProject();
+        createProjectTab();
     };
     const DOMTask = () => {
         if (createTask().description === '') return;
@@ -178,15 +222,17 @@ const addTask = (() => {
     const addListener = () => {
         document.getElementById('add').addEventListener('click', showInterface);
         document.getElementById('cancel').addEventListener('click', hideInterface);
+        document.getElementById('projects').addEventListener('click', expandProjects);
         document.getElementById('submit').addEventListener('click', DOMTask);
         document.getElementById('today').addEventListener('click', initToday);
         document.getElementById('upcoming').addEventListener('click', initUpcoming);
         document.getElementById('inbox').addEventListener('click', initInbox);
-        document.getElementById('projectCreatorPlus').addEventListener('click', pushProject);
+        document.getElementById('projectCreatorPlus').addEventListener('click', manageProject);
         document.querySelectorAll('.projectList').forEach((p) => p.addEventListener('click', selectProject));
         document
             .querySelectorAll('.priorityChooserColChoice')
             .forEach((p) => p.addEventListener('click', selectChildPriority));
+        document.querySelectorAll('.projectsUnder').forEach((p) => p.addEventListener('click', initProject));
         document.getElementById('taskText').addEventListener('keyup', changeOpacity);
         document.addEventListener('click', collapseContent);
     };
@@ -195,6 +241,6 @@ const addTask = (() => {
 
 addTask.addListener();
 
-// window.onload = () => document.getElementById('datepicker').min = format(new Date(), 'yyyy-MM-dd')
+window.onload = () => (document.getElementById('datepicker').min = format(new Date(), 'yyyy-MM-dd'));
 
 export { taskArray, projectArray, switchPage };
